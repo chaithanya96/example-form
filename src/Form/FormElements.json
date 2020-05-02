@@ -1,0 +1,36 @@
+{
+    "formElements": [
+        {
+            "field": "InputString",
+            "type": "text"
+        },
+        {
+            "field": "InputNumber",
+            "type": "number"
+        },
+        {
+            "field": "RadioButton",
+            "options": [
+                "Yes",
+                "No"
+            ]
+        },
+        {
+            "field": "Dropdown",
+            "options": [
+                "Red",
+                "Blue",
+                "Green",
+                "Yellow"
+            ]
+        },
+        {
+            "field": "Checkbox",
+            "options": [
+                "Bike",
+                "Car",
+                "Bicycle"
+            ]
+        }
+    ]
+}

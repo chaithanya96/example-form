@@ -1,0 +1,16 @@
+.success {
+    background-color: #17bf33;
+    padding: 10px;
+    color: white;
+    font-size: 36px;
+    margin-bottom: 21px;
+    text-align: center;
+}
+.submit-container{
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    padding: 2%;
+    margin-top: 3%;
+    background-color: #f2f2f2;
+}
