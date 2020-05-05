@@ -1,15 +1,20 @@
 {
     "formElements": [
         {
-            "field": "InputString",
-            "type": "text"
-        },
-        {
-            "field": "InputNumber",
+            "field": "Input",
+            "key": "inputNumber",
             "type": "number"
         },
         {
+            "field": "Input",
+            "key": "stringInput",
+            "type": "string",
+            "startWith": "sc"
+        },
+        {
             "field": "RadioButton",
+            "key": "inputRadio",
+            "label": "Select one option:",
             "options": [
                 "Yes",
                 "No"
@@ -17,6 +22,7 @@
         },
         {
             "field": "Dropdown",
+            "key": "inputDropdown",
             "options": [
                 "Red",
                 "Blue",
@@ -26,6 +32,8 @@
         },
         {
             "field": "Checkbox",
+            "key": "inputCheckbox",
+            "label": "Select one or more options:",
             "options": [
                 "Bike",
                 "Car",

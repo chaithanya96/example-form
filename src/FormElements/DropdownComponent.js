@@ -6,6 +6,7 @@ export function DropdownComponent(props) {
             <select
                 className="form-input"
                 value={props.value}
+                name={props.name}
                 onChange={props.changeValue}>
                 <option value="" disabled>Select option</option>
                 {props.options.map((item, index) =>

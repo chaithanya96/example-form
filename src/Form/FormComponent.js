@@ -12,98 +12,74 @@ import { withRouter } from "react-router-dom";
 class FormComponent extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            inputString: "",
-            inputNumber: "",
-            inputRadio: "Yes",
-            inputDropdown: "",
-            inputCheckbox: [],
-        };
-        this.changeInputString = this.changeInputString.bind(this);
-        this.changeInputNumber = this.changeInputNumber.bind(this);
-        this.changeInputRadio = this.changeInputRadio.bind(this);
-        this.changeInputDropdown = this.changeInputDropdown.bind(this);
-        this.changeInputCheckbox = this.changeInputCheckbox.bind(this);
+        this.state = {};
         this.disableSubmit = this.disableSubmit.bind(this);
     }
-    changeInputString(event) {
-        this.setState({ inputString: event.target.value })
-    }
-    changeInputNumber(event) {
-        this.setState({ inputNumber: event.target.value })
-    }
-    changeInputRadio(event) {
-        this.setState({ inputRadio: event.target.value })
-    }
-    changeInputDropdown(event) {
-        this.setState({ inputDropdown: event.target.value })
-    }
-    changeInputCheckbox(event) {
+    changeInputCheckbox = (event) => {
         const newSelection = event.target.value;
         let newSelectionArray;
-        if (this.state.inputCheckbox.indexOf(newSelection) > -1) {
-            newSelectionArray = this.state.inputCheckbox.filter(s => s !== newSelection)
+        if (this.state[event.target.name]) {
+            if (this.state[event.target.name].indexOf(newSelection) > -1) {
+                newSelectionArray = this.state[event.target.name].filter(s => s !== newSelection)
+            } else {
+                newSelectionArray = [...this.state[event.target.name], newSelection];
+            }
+            this.setState({ [event.target.name]: newSelectionArray })
         } else {
-            newSelectionArray = [...this.state.inputCheckbox, newSelection];
+            this.setState({ [event.target.name]: [newSelection] })
         }
-        this.setState({ inputCheckbox: newSelectionArray })
     }
     submitFormValues(e) {
         e.preventDefault();
-        const formValues = {
-            inputString: this.state.inputString,
-            inputNumber: this.state.inputNumber,
-            inputRadio: this.state.inputRadio,
-            inputDropdown: this.state.inputDropdown,
-            inputCheckbox: this.state.inputCheckbox,
-        };
-        this.props.submitFormData(formValues)
+        this.props.submitFormData(this.state)
         this.props.history.push('/submit');
+    }
+    changeInput = (event) => {
+        this.setState({ [event.target.name]: event.target.value });
     }
     displayFormElements() {
         return formElements.formElements.map((item) => {
             switch (item.field) {
-                case "InputString":
+                case "Input":
                     return (
                         <InputComponent
                             type={item.type}
-                            key={item.type}
-                            value={this.state.inputString}
-                            changeInput={this.changeInputString}
+                            name={item.key}
+                            key={item.key}
+                            value={this.state[item.key] || ""}
+                            changeInput={this.changeInput}
+                            startString={item.startWith ? item.startWith : ""}
                         />
                     );
-                case "InputNumber":
-                    return (
-                        <InputComponent
-                            type={item.type}
-                            key={item.type}
-                            value={this.state.inputNumber}
-                            changeInput={this.changeInputNumber}
-                        />);
                 case "RadioButton":
                     return (
                         <RadioComponent
-                            value={this.state.inputRadio}
-                            changeInputRadio={this.changeInputRadio}
+                            value={this.state[item.key] || ""}
+                            name={item.key}
+                            changeInputRadio={this.changeInput}
                             options={item.options}
-                            key={item.field}
+                            label={item.label}
+                            key={item.key}
                         />);
                 case "Dropdown":
                     return (
                         <DropdownComponent
-                            value={this.state.inputDropdown}
-                            changeValue={this.changeInputDropdown}
+                            name={item.key}
+                            value={this.state[item.key] || ""}
+                            changeValue={this.changeInput}
                             options={item.options}
-                            key={item.field}
+                            key={item.key}
                         />
                     );
                 case "Checkbox":
                     return (
                         <CheckboxComponent
-                            value={this.state.inputCheckbox}
+                            name={item.key}
+                            value={this.state[item.key] || ""}
                             changeValue={this.changeInputCheckbox}
                             options={item.options}
-                            key={item.field}
+                            key={item.key}
+                            label={item.label}
                         />
                     );
                 default: return null;
@@ -112,11 +88,13 @@ class FormComponent extends React.Component {
         );
     }
     disableSubmit() {
-        if (!this.state.inputString || !this.state.inputNumber || !this.state.inputRadio ||
-            !this.state.inputDropdown || this.state.inputCheckbox.length === 0) {
-            return true;
-        }
-        return false;
+        let flag = false;
+        formElements.formElements.forEach((item) => {
+            if (typeof this.state[item.key] === 'undefined' || this.state[item.key].length === 0) {
+                flag = true;
+            }
+        });
+        return flag;
     }
     render() {
         return (
